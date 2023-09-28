@@ -6,7 +6,7 @@
         android:padding="10dp">
 
     <TextView
-            android:id="@+id/character_info"
+            android:id="@+id/character"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="角色信息"
