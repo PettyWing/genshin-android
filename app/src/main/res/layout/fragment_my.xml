@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_character"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="更新角色信息" />
+
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_relics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="更新圣遗物信息" />
+
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="退出登录" />
+</LinearLayout>

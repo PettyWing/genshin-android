@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="角色："
+                android:textSize="16sp"
+                android:layout_marginRight="10dp" />
+
+        <AutoCompleteTextView
+                android:id="@+id/tv_character"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:hint="输入角色名"
+                android:textSize="14sp"
+                android:completionThreshold="1" />
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="套装："
+                android:textSize="16sp"
+                android:layout_marginRight="10dp" />
+
+        <AutoCompleteTextView
+                android:id="@+id/tv_relics"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:hint="输入套装名"
+                android:completionThreshold="1" />
+
+    </LinearLayout>
+
+    <com.nex3z.flowlayout.FlowLayout
+            android:id="@+id/ll_shoes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="时之沙："
+                android:textSize="16sp"
+                android:layout_marginRight="10dp" />
+
+    </com.nex3z.flowlayout.FlowLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/black" />
+
+    <com.nex3z.flowlayout.FlowLayout
+            android:id="@+id/ll_ring"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="空之杯："
+                android:textSize="16sp"
+                android:layout_marginRight="10dp" />
+
+    </com.nex3z.flowlayout.FlowLayout>
+
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/black" />
+
+    <com.nex3z.flowlayout.FlowLayout
+            android:id="@+id/ll_dress"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="理之冠："
+                android:textSize="16sp"
+                android:layout_marginRight="10dp" />
+
+    </com.nex3z.flowlayout.FlowLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/black" />
+
+    <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_marginTop="5dp"
+            android:id="@+id/save"
+            android:layout_gravity="center_horizontal"
+            android:text="保存" />
+</LinearLayout>
