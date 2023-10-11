@@ -5,9 +5,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import android.content.Context;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 /**
  * @author youer
@@ -87,5 +90,24 @@ public class StorageUtil {
             }
         }
         return null;
+    }
+
+    public static JsonObject readJsonFromAssets(String fileName) {
+        try {
+            InputStream inputStream = StorageUtil.class.getClassLoader().getResourceAsStream("assets/" + fileName);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+            bufferedReader.close();
+
+            String json = stringBuilder.toString();
+            return new Gson().fromJson(json, JsonObject.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

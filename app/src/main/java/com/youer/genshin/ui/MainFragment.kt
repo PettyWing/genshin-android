@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.youer.genshin.App
 import com.youer.genshin.databinding.FragmentMainBinding
+import com.youer.genshin.presenter.MainPresenter
+import com.youer.genshin.presenter.ResultCallback
 import com.youer.genshin.req.CalculateReq
 import com.youer.genshin.req.CalculateReq.CharacterInfo
 import com.youer.genshin.resp.CalculateResp
@@ -19,12 +21,14 @@ import com.youer.genshin.view.CharacterInfoView.DeleteListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * @author youer
  * @date 9/20/23
  */
-class MainFragment : BaseFragment() {
+class MainFragment(var presenter: MainPresenter) : BaseFragment(presenter) {
     private var calculateReq = CalculateReq()
     private lateinit var binding: FragmentMainBinding
     private var adapter: ExpandAdapter = ExpandAdapter()
@@ -67,28 +71,19 @@ class MainFragment : BaseFragment() {
     }
 
     fun calculate() {
-        if (characterInfoList.isEmpty()) {
+        if (calculateReq.characters.isEmpty()) {
             Toast.makeText(context, "请先添加角色", Toast.LENGTH_SHORT).show()
             return
         }
-        App.apiService.calculateCharacterRelics(calculateReq)
-                .enqueue(object : Callback<Result<CalculateResp>> {
-                    override fun onResponse(call: Call<Result<CalculateResp>>, response: Response<Result<CalculateResp>>) {
-                        if (response.isSuccessful) {
-                            val result = response.body()
-                            if (result.isSuccess) {
-                                val resp = result.result
-                                adapter.setData(resp?.characters ?: ArrayList())
-                            } else {
-                                Toast.makeText(context, response.message(), Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    }
+        presenter.calculate(calculateReq,object : ResultCallback<List<CalculateResp.CharacterResp>?>{
+            override fun success(t: List<CalculateResp.CharacterResp>?) {
+                adapter.setData(t)
+            }
 
-                    override fun onFailure(call: Call<Result<CalculateResp>>, t: Throwable) {
-                        Log.e(TAG, "onFailure: ", t)
-                    }
-                })
+            override fun fail(s: String) {
+                Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     companion object {

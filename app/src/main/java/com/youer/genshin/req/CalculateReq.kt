@@ -2,7 +2,7 @@ package com.youer.genshin.req
 
 class CalculateReq {
     var uid: Long? = null
-    var characters: List<CharacterInfo>? = null
+    var characters: List<CharacterInfo> = ArrayList()
 
     class CharacterInfo {
         var characterId: String? = null

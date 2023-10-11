@@ -42,4 +42,8 @@ class LoginActivity : AppCompatActivity() {
         })
         finish()
     }
+
+    companion object {
+        private const val TAG = "LoginActivity"
+    }
 }

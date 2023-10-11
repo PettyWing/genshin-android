@@ -13,9 +13,11 @@ import com.google.gson.JsonObject
 import com.youer.genshin.App
 import com.youer.genshin.constants.Constants
 import com.youer.genshin.databinding.FragmentMyBinding
+import com.youer.genshin.presenter.MainPresenter
 import com.youer.genshin.resp.Result
 import com.youer.genshin.utils.SPUtil
 import com.youer.genshin.utils.StorageUtil
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,7 +26,7 @@ import retrofit2.Response
  * @author youer
  * @date 9/20/23
  */
-class MyFragment : BaseFragment() {
+class MyFragment(presenter: MainPresenter) : BaseFragment(presenter) {
     private lateinit var binding: FragmentMyBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentMyBinding.inflate(layoutInflater)
@@ -42,15 +44,17 @@ class MyFragment : BaseFragment() {
                 (context as Activity?)?.finish()
             }
         }
-        if (StorageUtil.fileExists(context, Constants.FILE_CHARACTER)) {
-            Constants.CHARACTERS = Gson().fromJson(StorageUtil.readJsonFromFile(context, Constants.FILE_CHARACTER), JsonObject::class.java)
-        } else {
-            character
-        }
-        if (StorageUtil.fileExists(context, Constants.FILE_RELICS)) {
-            Constants.RELICS = Gson().fromJson(StorageUtil.readJsonFromFile(context, Constants.FILE_RELICS), JsonObject::class.java)
-        } else {
-            relics
+        buildCharacter();
+    }
+
+    fun buildCharacter(){
+        Constants.CHARACTERS = JsonObject()
+        for ((key, value) in Constants.CHARACTERS_INFO?.entrySet()!!) {
+            // 在这里对每个键值对进行操作
+            var tmp = (value as JsonObject).get("NameTextMapHash")
+            if(tmp!=null) {
+                Constants.CHARACTERS?.add(key, Constants.LOC_INFO?.get(tmp.asString))
+            }
         }
     }
 

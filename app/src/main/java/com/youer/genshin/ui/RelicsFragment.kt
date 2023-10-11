@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.youer.genshin.App
 import com.youer.genshin.constants.Constants
 import com.youer.genshin.databinding.FragmentRelicsBinding
+import com.youer.genshin.presenter.MainPresenter
+import com.youer.genshin.presenter.ResultCallback
 import com.youer.genshin.resp.LoginResp
 import com.youer.genshin.resp.RelicsDTO
 import com.youer.genshin.resp.Result
@@ -23,7 +25,7 @@ import retrofit2.Response
  * @author youer
  * @date 9/20/23
  */
-class RelicsFragment : BaseFragment() {
+class RelicsFragment(var presenter: MainPresenter) : BaseFragment(presenter) {
     private lateinit var binding: FragmentRelicsBinding
     private var adapter: RelicsAdapter = RelicsAdapter()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -43,45 +45,28 @@ class RelicsFragment : BaseFragment() {
     }
 
     var multiImportListener = View.OnClickListener {
-        App.apiService.loadRelic(uid)
-                .enqueue(object : Callback<Result<List<RelicsDTO>>> {
-                    override fun onResponse(call: Call<Result<List<RelicsDTO>>>, response: Response<Result<List<RelicsDTO>>>) {
-                        if (response.isSuccessful) {
-                            val result = response.body()
-                            if (result.isSuccess) {
-                                adapter.setData(result.result)
-                                Toast.makeText(context, "同步完成", Toast.LENGTH_SHORT).show()
-                            } else {
-                                Toast.makeText(context, response.message(), Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    }
-
-                    override fun onFailure(call: Call<Result<List<RelicsDTO>>>, t: Throwable) {
-                        Log.e(TAG, "onFailure: ", t)
-                    }
-                })
+        presenter.multiImport(uid, object : ResultCallback<List<RelicsDTO>?> {
+            override fun success(relicsDTOS: List<RelicsDTO>?) {
+                adapter.setData(relicsDTOS)
+                Toast.makeText(context, "同步完成", Toast.LENGTH_SHORT).show()
+            }
+            override fun fail(s: String) {
+                Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     fun login(uid: Long?) {
-        App.apiService.login(uid)
-                .enqueue(object : Callback<Result<LoginResp>> {
-                    override fun onResponse(call: Call<Result<LoginResp>>, response: Response<Result<LoginResp>>) {
-                        if (response.isSuccessful) {
-                            val result = response.body()
-                            if (result.isSuccess) {
-                                SPUtil.writeString(context, Constants.KEY_UID, uid.toString() + "")
-                                adapter.setData(result.result?.relics)
-                            } else {
-                                Toast.makeText(context, response.message(), Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    }
+        presenter.login(uid ,object :ResultCallback<List<RelicsDTO>?>{
+            override fun success(relicsDTOS: List<RelicsDTO>?) {
+                    adapter.setData(relicsDTOS)
+            }
 
-                    override fun onFailure(call: Call<Result<LoginResp>>, t: Throwable) {
-                        Log.e(TAG, "onFailure: ", t)
-                    }
-                })
+            override fun fail(s: String) {
+            Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
     companion object {

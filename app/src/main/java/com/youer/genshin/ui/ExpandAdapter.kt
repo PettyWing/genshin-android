@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.youer.genshin.constants.AppendProp
 import com.youer.genshin.constants.AppendProp.Companion.getType
 import com.youer.genshin.constants.Constants
 import com.youer.genshin.databinding.ItemCharacterTitleBinding
@@ -17,7 +18,6 @@ import com.youer.genshin.resp.CalculateResp.CharacterResp
 import com.youer.genshin.resp.RelicsAttributes
 import com.youer.genshin.resp.RelicsDTO
 import com.youer.genshin.utils.CommonUtils
-import java.util.*
 
 /**
  * @author youer
@@ -25,13 +25,13 @@ import java.util.*
  */
 class ExpandAdapter : BaseExpandableListAdapter() {
     private var data: List<CharacterResp> = ArrayList()
-    fun setData(data: List<CharacterResp>) {
-        this.data = data
+    fun setData(data: List<CharacterResp>?) {
+        this.data = data?:ArrayList()
         notifyDataSetChanged()
     }
 
     override fun getGroupCount(): Int {
-        return data.size ?: 0
+        return data.size
     }
 
     override fun getChildrenCount(groupPosition: Int): Int {
@@ -98,7 +98,7 @@ class ExpandAdapter : BaseExpandableListAdapter() {
                 groupType.text = relicsDTO.groupType
                 type.text = relicsDTO.equipTypeName
                 mainProp.text = relicsDTO.attributes?.appendPropName
-                mainValue.text = CommonUtils.displayRelicsValue(CommonUtils.convertCamelCase(relicsDTO.attributes?.appendProp), relicsDTO.attributes?.mainValue)
+                mainValue.text = CommonUtils.displayRelicsValue(relicsDTO.attributes?.appendProp?.apiName, relicsDTO.attributes?.mainValue)
                 if (relicsDTO.score == null) {
                     score.visibility = View.GONE
                 } else {
@@ -121,7 +121,7 @@ class ExpandAdapter : BaseExpandableListAdapter() {
         for ((key, value) in attributes.entrySet()) {
             if (!TextUtils.equals("appendPropName", key) && !TextUtils.equals("mainValue", key) && !TextUtils.equals("appendProp", key)) {
                 val textView = TextView(container.context)
-                textView.text = getType(key)?.displayName ?: "" + "：" + CommonUtils.displayRelicsValue(key, value.asDouble)
+                textView.text = (AppendProp.getTypeByApiName(key)?.displayName ?: "") + "：" + CommonUtils.displayRelicsValue(key, value.asDouble)
                 container.addView(textView)
             }
         }

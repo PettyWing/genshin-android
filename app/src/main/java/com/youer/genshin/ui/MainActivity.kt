@@ -15,6 +15,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.tabs.TabLayoutMediator.TabConfigurationStrategy
 import com.youer.genshin.constants.Constants
 import com.youer.genshin.databinding.ActivityMainBinding
+import com.youer.genshin.presenter.MainPresenter
 import java.util.stream.Collectors
 import java.util.stream.Stream
 import kotlin.properties.Delegates
@@ -28,9 +29,11 @@ class MainActivity : AppCompatActivity() {
     private val activeColor = Color.parseColor("#ff678f")
     private val normalColor = Color.parseColor("#666666")
     private val normalSize = 14
+    private lateinit var presenter: MainPresenter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        presenter = MainPresenter(this)
         setContentView(binding.root)
         uid = intent.getLongExtra(Constants.KEY_UID, 0)
         initView()
@@ -43,10 +46,13 @@ class MainActivity : AppCompatActivity() {
             registerOnPageChangeCallback(changeCallback)
             adapter = object : FragmentStateAdapter(supportFragmentManager, lifecycle) {
                 override fun createFragment(position: Int): Fragment {
-                    return (fragments[position].newInstance() as Fragment).apply {
-                        val args = Bundle()
-                        args.putLong(Constants.KEY_UID, uid)
-                        arguments = args
+                    fragments[position].getDeclaredConstructor(MainPresenter::class.java).apply {
+                        isAccessible = true
+                        return (newInstance(presenter) as Fragment).apply {
+                            val args = Bundle()
+                            args.putLong(Constants.KEY_UID, uid)
+                            arguments = args
+                        }
                     }
                 }
 

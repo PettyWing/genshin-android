@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.youer.genshin.constants.AppendProp.Companion.getType
+import com.youer.genshin.constants.AppendProp.Companion.getTypeByApiName
 import com.youer.genshin.databinding.ItemRelicsBinding
 import com.youer.genshin.resp.RelicsAttributes
 import com.youer.genshin.resp.RelicsDTO
@@ -42,7 +43,7 @@ class RelicsAdapter : RecyclerView.Adapter<RelicsAdapter.ViewHolder>() {
         for ((key, value) in attributes.entrySet()) {
             if (!TextUtils.equals("appendPropName", key) && !TextUtils.equals("mainValue", key) && !TextUtils.equals("appendProp", key)) {
                 val textView = TextView(container.context)
-                textView.text = getType(key)?.displayName ?: "" + "：" + CommonUtils.displayRelicsValue(key, value.asDouble)
+                textView.text = (getTypeByApiName(key)?.displayName ?: "") + "：" + CommonUtils.displayRelicsValue(key, value.asDouble)
                 container.addView(textView)
             }
         }
@@ -54,7 +55,7 @@ class RelicsAdapter : RecyclerView.Adapter<RelicsAdapter.ViewHolder>() {
             groupType.text = relicsDTO.groupType
             type.text = relicsDTO.equipTypeName
             mainProp.text = relicsDTO.attributes!!.appendPropName
-            mainValue.text = CommonUtils.displayRelicsValue(CommonUtils.convertCamelCase(relicsDTO.attributes!!.appendProp), relicsDTO.attributes!!.mainValue!!)
+            mainValue.text = CommonUtils.displayRelicsValue(relicsDTO.attributes.appendProp.apiName, relicsDTO.attributes!!.mainValue!!)
             if (relicsDTO.score == null) {
                 score.visibility = View.GONE
             } else {

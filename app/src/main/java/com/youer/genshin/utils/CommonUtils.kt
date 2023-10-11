@@ -16,7 +16,7 @@ object CommonUtils {
      * @return
      */
     fun displayRelicsValue(key: String?, value: Double?): String {
-        return if (AppendProp.getType(key)?.isPercent!!) {
+        return if (AppendProp.getTypeByApiName(key)?.isPercent!!) {
             "$value%"
         } else format(value)
     }

@@ -27,12 +27,25 @@ enum class AppendProp(val apiName: String, val key: String, val displayName: Str
     HEAL_ADD("healAdd", "FIGHT_PROP_HEAL_ADD", "治疗加成", true);
 
     companion object {
-        fun getType(apiName: String?): AppendProp? {
+        @JvmStatic
+        fun getTypeByApiName(apiName: String?): AppendProp? {
             if (TextUtils.isEmpty(apiName)) {
                 return null
             }
             for (type in values()) {
                 if (TextUtils.equals(apiName, type.apiName)) {
+                    return type
+                }
+            }
+            return null
+        }
+        @JvmStatic
+        fun getType(key: String?): AppendProp? {
+            if (TextUtils.isEmpty(key)) {
+                return null
+            }
+            for (type in values()) {
+                if (TextUtils.equals(key, type.key)) {
                     return type
                 }
             }
